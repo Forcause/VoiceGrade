@@ -4,12 +4,17 @@ namespace VoiceGradeApi.Util;
 
 public class AudioConverter
 {
-    public string ConvertAudio(string infile)
+    private string _infile;
+
+    public AudioConverter(string filePath)
     {
-        //Сделать файлы уникальными для пользователей
-        string outfile = infile.Substring(0,infile.LastIndexOf(("\\"))) + @"\converted.wav";
+        this._infile = filePath;
+    }
+    public string ConvertAudio()
+    {
+        string outfile = _infile.Substring(0,_infile.LastIndexOf(("\\"))) + @"\converted.wav";
         int neededRate = 16000;
-        using (var reader = new AudioFileReader(infile))
+        using (var reader = new AudioFileReader(_infile))
         {
             reader.ToMono(1.0f, 0.0f);
             var outFormat = new WaveFormat(neededRate, reader.WaveFormat.Channels);

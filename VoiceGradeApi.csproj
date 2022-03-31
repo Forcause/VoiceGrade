@@ -14,6 +14,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <_ContentIncludedByDefault Remove="UploadedFiles\2c245022-ca3d-4fd6-9b11-99223ed2edb9\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\58343610-ce87-47ab-b3f9-1969e056a7b3\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\0b07a8c1-53a6-4937-9aa9-47470396e720\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\a124cca8-d71b-4c83-83f6-9cd6861b94a7\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\fefd1efe-844b-4b78-b9cc-32e772226c81\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\f4150295-5464-4530-ad2e-fb4a027c2c0b\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\35ec7506-b984-4f2b-a10a-b915d5c43e4f\test.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\002b9fe8-da05-4c8f-aeb6-256b3b15ea81\test.json" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="GeneratedFiles" />
       <Folder Include="UploadedFiles" />
     </ItemGroup>

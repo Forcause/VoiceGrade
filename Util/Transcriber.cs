@@ -1,25 +1,25 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using Newtonsoft.Json.Linq;
 using Vosk;
 
 namespace VoiceGradeApi.Util;
 
-
-public class Transcriber
+public static class Transcriber
 {
+    private static readonly Model
+        model = new(Directory.GetCurrentDirectory() + @"\AudioModel\vosk-model-small-ru-0.22");
+
+    private static readonly VoskRecognizer rec = new(model, 16000.0f);
+
     private static VoskRecognizer Initialize()
     {
         Vosk.Vosk.SetLogLevel(-1);
-        //Перекинуть файл в папку проекта
-        Model model = new Model(Directory.GetCurrentDirectory() + @"\AudioModel\vosk-model-small-ru-0.22");
-        VoskRecognizer rec = new VoskRecognizer(model, 16000.0f);
         rec.SetMaxAlternatives(0);
         rec.SetWords(true);
         return rec;
     }
 
-    private String GetTranscribedText(string finalResult)
+    private static String GetTranscribedText(string finalResult)
     {
         StringBuilder currentName = new StringBuilder();
         dynamic parsedResult = JObject.Parse(finalResult);
@@ -27,18 +27,18 @@ public class Transcriber
 
         for (int i = 0; i < results.Count; i++)
         {
-            currentName.Append(results[i]["word"].ToString());
+            currentName.Append(results[i]["word"]);
             currentName.Append(" ");
         }
 
         return currentName.ToString();
     }
 
-    public String TranscribeAudio(string auidofilePath)
+    public static String TranscribeAudio(string audioFilePath)
     {
         VoskRecognizer rec = Initialize();
 
-        using (Stream source = File.OpenRead($@"{auidofilePath}"))
+        using (Stream source = File.OpenRead($@"{audioFilePath}"))
         {
             byte[] buffer = new byte[4096];
             int bytesRead;

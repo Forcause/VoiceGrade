@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using VoiceGradeApi.Models;
 
-namespace VoiceGradeApi.Util;
+namespace VoiceGradeApi.Services.FileService;
 
-public class JsonWriter
+public class JsonService : IFileService
 {
     private readonly string _generatedFilesDirectory = Directory.GetCurrentDirectory() + @"\GeneratedFiles"; 
-    public string CreateFile(List<Person> pupils)
+    public string CreateFile(List<Pupil> pupils)
     {
         if (!Directory.Exists(_generatedFilesDirectory)) Directory.CreateDirectory(_generatedFilesDirectory);
         string jsonFilePath = _generatedFilesDirectory + @$"\{Guid.NewGuid()}.json";
@@ -21,6 +21,23 @@ public class JsonWriter
         finally
         {
             if (writer is not null) writer.Close();
+        }
+    }
+
+    public List<Pupil> ReadFile(string path)
+    {
+        TextReader reader = null;
+        try
+        {
+            reader = new StreamReader(path);
+            var readed = reader.ReadToEnd();
+            var jsonPersons = JsonConvert.DeserializeObject<List<Pupil>>(readed);
+
+            return jsonPersons;
+        }
+        finally
+        {
+            if (reader is not null) reader.Close();
         }
     }
 }

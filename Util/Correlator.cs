@@ -5,7 +5,7 @@ namespace VoiceGradeApi.Util;
 
 public class Correlator
 {
-    public void CorrelateScores(List<Person> pupils, List<string> transcribedNames)
+    public void CorrelateScores(List<Pupil> pupils, List<string> transcribedNames)
     {
         Regex getGrade = new Regex(@"[^\d]");
         for (int i = 0; i < pupils.Count; i++)
@@ -14,11 +14,11 @@ public class Correlator
             int minPosition = 0;
             for (int j = 0; j < transcribedNames.Count; j++)
             {
-                int current = DamerauLevenshtein.GetDistance(transcribedNames[j], pupils[i].Name);
+                int current = DamerauLevenshtein.GetDistance(transcribedNames[j], pupils[i].FullName);
                 if (current < min)
                 {
                     min = current;
-                    minPosition = i;
+                    minPosition = j;
                 }
             }
 

@@ -1,32 +1,55 @@
 ﻿using System.Text.RegularExpressions;
+using VoiceGradeApi.Services.FileService;
 using VoiceGradeApi.Util;
 
-namespace VoiceGradeApi.Services.FileReaderServices;
+namespace VoiceGradeApi.Services;
 
 public class ProcessingService
 {
-    private Regex checkAudioFormat = new Regex(@"\w*\.wav");
-    private AudioConverter converter = new AudioConverter();
-    private Transcriber transcriber = new Transcriber();
-    private JsonReader jsonReader = new JsonReader();
-    private JsonWriter writer = new JsonWriter();
-    private TextParser parser = new TextParser();
-    private Correlator correlator = new Correlator();
+    private static readonly Regex _checkAudioFormat = new Regex(@"\w*\.wav");
+    private IFileService _fileService;
+    private TextParser _parser;
+    private Correlator _correlator;
+
+    public ProcessingService()
+    {
+        _parser = new TextParser();
+        _correlator = new Correlator();
+    }
 
     public string GetResultedFile(List<string> files)
     {
-        string audioFile = "", jsonFile = "";
+        string audioFile = "", pupilsFile = "";
         foreach (string file in files)
         {
-            if (file.Contains(".json")) jsonFile = file;
-            else audioFile = file;
+            FileInfo info = new FileInfo(file);
+            switch (info.Extension)
+            {
+                case ".json":
+                    _fileService = new JsonService();
+                    pupilsFile = file;
+                    break;
+                case ".xml":
+                    _fileService = new XmlService();
+                    pupilsFile = file;
+                    break;
+                default:
+                    audioFile = file;
+                    break;
+            }
         }
-        if (!checkAudioFormat.IsMatch(audioFile)) audioFile = converter.ConvertAudio(audioFile);
-        var allData = transcriber.TranscribeAudio(audioFile);
-        var pupils = jsonReader.Read(jsonFile);
-        var transcribedNames = parser.ParseData(allData);
-        correlator.CorrelateScores(pupils, transcribedNames);
-        string createdFilePath = writer.CreateFile(pupils);
+
+        if (!_checkAudioFormat.IsMatch(audioFile))
+        {
+            AudioConverter converter = new AudioConverter(audioFile);
+            audioFile = converter.ConvertAudio();
+        }
+
+        var allData = Transcriber.TranscribeAudio(audioFile);
+        var pupils = _fileService.ReadFile(pupilsFile);
+        var transcribedNames = _parser.ParseData(allData);
+        _correlator.CorrelateScores(pupils, transcribedNames);
+        string createdFilePath = _fileService.CreateFile(pupils);
         return createdFilePath;
     }
 }
