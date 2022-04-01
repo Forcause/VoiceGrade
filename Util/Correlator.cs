@@ -14,7 +14,8 @@ public class Correlator
             int minPosition = 0;
             for (int j = 0; j < transcribedNames.Count; j++)
             {
-                int current = DamerauLevenshtein.GetDistance(transcribedNames[j], pupils[i].FullName);
+                int current = DamerauLevenshtein.GetDistance(transcribedNames[j].ToUpper().Replace('Ё', 'Е'),
+                    pupils[i].FullName.ToUpper().Replace('Ё', 'Е'));
                 if (current < min)
                 {
                     min = current;
@@ -23,6 +24,7 @@ public class Correlator
             }
 
             pupils[i].Score = int.Parse(getGrade.Replace(transcribedNames[minPosition], ""));
+            transcribedNames.RemoveAt(minPosition);
         }
     }
 }
