@@ -1,43 +1,58 @@
 ﻿using System.Text;
 using Newtonsoft.Json.Linq;
+using VoiceGradeApi.Models;
 using Vosk;
 
 namespace VoiceGradeApi.Util;
 
-public static class Transcriber
+internal class Transcriber
 {
-    private static readonly Model
-        model = new(Directory.GetCurrentDirectory() + @"\AudioModel\vosk-model-small-ru-0.22");
-
-    private static readonly VoskRecognizer rec = new(model, 16000.0f);
-
-    private static VoskRecognizer Initialize()
+    private static AutoResetEvent _transcriberEvent = new AutoResetEvent(true);
+    
+    //Initialize parameters of recognizer
+    private static void Initialize(VoskRecognizer rec)
     {
         Vosk.Vosk.SetLogLevel(-1);
+        Vosk.Vosk.GpuInit();
+        Vosk.Vosk.GpuThreadInit();
         rec.SetMaxAlternatives(0);
         rec.SetWords(true);
-        return rec;
     }
 
     private static String GetTranscribedText(string finalResult)
     {
-        StringBuilder currentName = new StringBuilder();
-        dynamic parsedResult = JObject.Parse(finalResult);
-        JArray results = parsedResult.result;
+        StringBuilder currentElement = new StringBuilder();
+        //Parse JSON string to elements
+        var parsedResult = JArray.Parse(finalResult);
 
-        for (int i = 0; i < results.Count; i++)
+        foreach (var results in parsedResult)
         {
-            currentName.Append(results[i]["word"]);
-            currentName.Append(" ");
+            for (int i = 0; i < results["result"].Count(); i++)
+            {
+                //Get needed element in JSON object and add it in string
+                currentElement.Append(results["result"][i]["word"].ToString());
+                currentElement.Append(" ");
+            }
         }
 
-        return currentName.ToString();
+        return currentElement.ToString();
     }
 
-    public static String TranscribeAudio(string audioFilePath)
+    public static string TranscribeAudio(string audioFilePath)
     {
-        VoskRecognizer rec = Initialize();
-
+        //Initialize recognizer Model
+        Model model = TranscriberModel.GetInstance.Model;
+        
+        //Synchronize concurrent session to concurrent model
+        _transcriberEvent.WaitOne();
+        
+        //Create and initialize parameters of recognizer object
+        VoskRecognizer rec = new(model, 32000.0f);
+        Initialize(rec);
+        
+        StringBuilder transcribedText = new StringBuilder("[");
+        
+        //Transcribe audiofile and add results to StringBuilder
         using (Stream source = File.OpenRead($@"{audioFilePath}"))
         {
             byte[] buffer = new byte[4096];
@@ -46,7 +61,7 @@ public static class Transcriber
             {
                 if (rec.AcceptWaveform(buffer, bytesRead))
                 {
-                    rec.Result();
+                    transcribedText.Append(rec.Result() + ',');
                 }
                 else
                 {
@@ -55,6 +70,12 @@ public static class Transcriber
             }
         }
 
-        return GetTranscribedText(rec.FinalResult());
+        transcribedText.Append(rec.FinalResult() + ']');
+        
+        //Reset recognizer for other session
+        rec.Reset();
+        _transcriberEvent.Set();
+        //get and return parsed from JSON text 
+        return GetTranscribedText(transcribedText.ToString());
     }
 }

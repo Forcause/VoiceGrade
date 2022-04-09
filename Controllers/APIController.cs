@@ -4,17 +4,18 @@ using VoiceGradeApi.Services;
 namespace VoiceGradeApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api")]
 public class FileUploadController : ControllerBase
 {
     private string _guid;
     private readonly string _directoryPath;
     private ProcessingService? _processingService;
 
-    public FileUploadController()
+    public FileUploadController(ProcessingService service)
     {
         _guid = Guid.NewGuid().ToString();
-        _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{_guid}"));
+       _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{_guid}"));
+       _processingService = service;
     }
 
     [HttpPost("upload")]
@@ -28,13 +29,16 @@ public class FileUploadController : ControllerBase
             var originalName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(_directoryPath, originalName);
 
-            await using var stream = System.IO.File.Create(filePath);
-            await file.CopyToAsync(stream);
+            await using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
             downloadedFiles.Add(filePath);
         }
-
-        Ok("Successfully uploaded");
-        _processingService = HttpContext.RequestServices.GetService<ProcessingService>();
+        
+        
+        //_processingService = HttpContext.RequestServices.GetService<ProcessingService>();
+        //_recognizer = HttpContext.RequestServices.GetService<Recognizer>();
         var res = _processingService?.GetResultedFile(downloadedFiles);
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(res ?? string.Empty);
         return File(bytes, "application/json", res);

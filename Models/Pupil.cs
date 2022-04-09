@@ -4,7 +4,7 @@ namespace VoiceGradeApi.Models;
 
 public class Pupil
 {
-    public string? Name { get; }
+    public string Name { get; }
 
     public string? Surname { get; }
 
@@ -15,7 +15,7 @@ public class Pupil
 
     public int Score { get; set; }
 
-    public Pupil(string? name, string? surname, string? patronymic)
+    public Pupil(string name, string? surname, string? patronymic)
     {
         Name = name;
         Surname = surname;

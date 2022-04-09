@@ -1,5 +1,7 @@
 using Microsoft.OpenApi.Models;
+using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

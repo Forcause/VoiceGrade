@@ -8,23 +8,26 @@ public class Correlator
     public void CorrelateScores(List<Pupil> pupils, List<string> transcribedNames)
     {
         Regex getGrade = new Regex(@"[^\d]");
+        Regex getTextOnly = new Regex(@"[^А-Я\s]+");
         for (int i = 0; i < pupils.Count; i++)
         {
-            int min = Int32.MaxValue;
+            int minDistance = Int32.MaxValue;
             int minPosition = 0;
+            string name = pupils[i].Surname + " " + pupils[i].Name;
             for (int j = 0; j < transcribedNames.Count; j++)
             {
-                int current = DamerauLevenshtein.GetDistance(transcribedNames[j].ToUpper().Replace('Ё', 'Е'),
-                    pupils[i].FullName.ToUpper().Replace('Ё', 'Е'));
-                if (current < min)
+                string currentName = transcribedNames[j].ToUpper().Replace('Ё', 'Е');
+                int currentDistance = DamerauLevenshtein.GetDistance(getTextOnly.Replace(currentName, " ").Trim(),
+                    name.ToUpper().Replace('Ё', 'Е'));
+                if (currentDistance < minDistance)
                 {
-                    min = current;
+                    minDistance = currentDistance;
                     minPosition = j;
                 }
             }
-
+            
             pupils[i].Score = int.Parse(getGrade.Replace(transcribedNames[minPosition], ""));
-            transcribedNames.RemoveAt(minPosition);
+            //transcribedNames.RemoveAt(minPosition);
         }
     }
 }

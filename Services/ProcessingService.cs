@@ -1,12 +1,13 @@
-﻿using System.Text.RegularExpressions;
-using VoiceGradeApi.Services.FileService;
+﻿using VoiceGradeApi.Services.FileService;
 using VoiceGradeApi.Util;
+using Transcriber = VoiceGradeApi.Util.Transcriber;
 
 namespace VoiceGradeApi.Services;
 
 public class ProcessingService
 {
-    private static readonly Regex _checkAudioFormat = new Regex(@"\w*\.wav");
+   
+    private object _lockTranscriber = new object();
     private IFileService _fileService;
     private TextParser _parser;
     private Correlator _correlator;
@@ -38,13 +39,12 @@ public class ProcessingService
                     break;
             }
         }
-
-        if (!_checkAudioFormat.IsMatch(audioFile))
-        {
-            AudioConverter converter = new AudioConverter(audioFile);
-            audioFile = converter.ConvertAudio();
-        }
-
+        
+        AudioConverter converter = new AudioConverter(audioFile);
+        audioFile = converter.ConvertAudio();
+        
+        
+        //Посмотреть, как сделать эксклюзивный доступ
         var allData = Transcriber.TranscribeAudio(audioFile);
         var pupils = _fileService.ReadFile(pupilsFile);
         var transcribedNames = _parser.ParseData(allData);
