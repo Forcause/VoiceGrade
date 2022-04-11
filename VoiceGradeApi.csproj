@@ -26,6 +26,7 @@
       <_ContentIncludedByDefault Remove="UploadedFiles\87bfea24-584c-48cc-a5bf-37044607dbb4\lot.json" />
       <_ContentIncludedByDefault Remove="UploadedFiles\b9853dd7-a618-4179-be88-74388cf767a0\lot.json" />
       <_ContentIncludedByDefault Remove="UploadedFiles\f4287112-82b7-42a5-b967-db79e9ca9dd5\lot.json" />
+      <_ContentIncludedByDefault Remove="GeneratedFiles\0086d9af-d8f8-4628-a646-60b94fdc8abe.json" />
     </ItemGroup>
 
 </Project>

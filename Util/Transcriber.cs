@@ -41,7 +41,7 @@ internal class Transcriber
     public static string TranscribeAudio(string audioFilePath)
     {
         //Initialize recognizer Model
-        Model model = TranscriberModel.GetInstance.Model;
+        Model model = TranscriberModel.Instance._model;
         
         //Synchronize concurrent session to concurrent model
         _transcriberEvent.WaitOne();
