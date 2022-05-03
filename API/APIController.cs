@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VoiceGradeApi.Services;
 
-namespace VoiceGradeApi.Controllers;
+namespace VoiceGradeApi.API;
 
 [ApiController]
 [Route("api")]
@@ -41,6 +41,7 @@ public class FileUploadController : ControllerBase
         //_recognizer = HttpContext.RequestServices.GetService<Recognizer>();
         var res = _processingService?.GetResultedFile(downloadedFiles);
         byte[] bytes = await System.IO.File.ReadAllBytesAsync(res ?? string.Empty);
-        return File(bytes, "application/json", res);
+        //return Ok();
+        return File(bytes, "application/json", res);;
     }
 }

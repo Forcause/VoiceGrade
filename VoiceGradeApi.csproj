@@ -14,19 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="GeneratedFiles\797a39de-99e1-436b-a3e5-fc763dfcb918.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\68d25d6d-e7c0-4930-b816-711b63cfb434\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\7c25b3f5-a823-41db-bead-ceffd90d3173\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\02434b8b-1c1b-4c56-9057-11944226a931\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\0d844d2f-22ae-4caf-9a38-26c32dabcdef\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\3e915e25-ca58-4c15-9d49-dcdc87337b5f\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\76e302ae-3523-4ab8-9f2b-e997915467fc\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\777db6f9-943f-4027-a1a4-cc56408dd3a2\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\7f6d2482-f4e9-4ecf-a1fc-372a94c29ba2\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\87bfea24-584c-48cc-a5bf-37044607dbb4\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\b9853dd7-a618-4179-be88-74388cf767a0\lot.json" />
-      <_ContentIncludedByDefault Remove="UploadedFiles\f4287112-82b7-42a5-b967-db79e9ca9dd5\lot.json" />
-      <_ContentIncludedByDefault Remove="GeneratedFiles\0086d9af-d8f8-4628-a646-60b94fdc8abe.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\97ceb14b-5a87-4c90-ad60-a6f276b221eb\lot.json" />
     </ItemGroup>
 
 </Project>

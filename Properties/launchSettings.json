@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "VoiceGradeApi": {
+    "VoiceGradeApiSwagger": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -17,6 +17,16 @@
       "applicationUrl": "https://localhost:7193;http://localhost:5193",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "VoiceGradeApiHtml": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "Index",
+      "applicationUrl": "https://localhost:7193;http://localhost:5193",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "TestHtml"
       }
     },
     "IIS Express": {
