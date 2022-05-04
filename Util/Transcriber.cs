@@ -12,11 +12,9 @@ internal class Transcriber
     //Initialize parameters of recognizer
     private static void Initialize(VoskRecognizer rec)
     {
-        Vosk.Vosk.SetLogLevel(-1); 
-        /* Для инициализации ядер ГПУ нужно вручную их определить
-        Vosk.Vosk.GpuInit(); need to build, search in git issues
+        Vosk.Vosk.SetLogLevel(-1);
+        Vosk.Vosk.GpuInit();
         Vosk.Vosk.GpuThreadInit();
-        */
         rec.SetMaxAlternatives(0);
         rec.SetWords(true);
     }
