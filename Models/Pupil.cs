@@ -4,9 +4,9 @@ namespace VoiceGradeApi.Models;
 
 public class Pupil
 {
-    public string Name { get; }
-
     public string? Surname { get; }
+    
+    public string Name { get; }
 
     public string? Patronymic { get; }
 

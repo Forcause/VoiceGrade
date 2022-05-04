@@ -33,7 +33,6 @@ public class XmlService : IFileService
         }
     }
 
-    //доделать чтение файла
     public List<Pupil> ReadFile(string path)
     {
         TextReader reader = null;
