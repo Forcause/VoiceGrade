@@ -27,12 +27,27 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1 API"));
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
 }
+else if (app.Environment.IsEnvironment("TestHtml"))
+{
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
 
-app.UseHttpsRedirection();
+    app.UseRouting();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
+    app.UseAuthorization();
+    
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}");
+    });
+}
 app.Run();

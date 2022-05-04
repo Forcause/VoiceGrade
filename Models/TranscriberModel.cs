@@ -7,7 +7,7 @@ public sealed class TranscriberModel
     private static TranscriberModel instance = null;
     private static readonly object padlock = new object();
 
-    public readonly Model _model = new Model(@"AudioModels/vosk-model-ru-0.22");
+    public readonly Model _model = new Model(@"AudioModels/vosk-model-small-ru-0.22");
 
     TranscriberModel()
     {
