@@ -3,7 +3,7 @@ using VoiceGradeApi.Models;
 
 namespace VoiceGradeApi.Services.FileService;
 
-public class XmlService : IFileService
+public sealed class XmlService : IFileService
 {
     private readonly string _generatedFilesDirectory = Directory.GetCurrentDirectory() + @"\GeneratedFiles";
 

@@ -1,4 +1,5 @@
 ﻿using VoiceGradeApi.Services.FileService;
+using VoiceGradeApi.Services.AudioConvertService;
 using VoiceGradeApi.Util;
 using Transcriber = VoiceGradeApi.Util.Transcriber;
 
@@ -40,8 +41,16 @@ public class ProcessingService
             }
         }
         
-        AudioConverter converter = new AudioConverter(audioFile);
-        audioFile = converter.ConvertAudio();
+        if (audioFile.Substring(audioFile.LastIndexOf(".") + 1).Equals("ogg"))
+        {
+            OggConverter converter = new OggConverter(audioFile);
+        }
+        else
+        {
+            MpConverter converter = new MpConverter(audioFile);
+            audioFile = converter.ConvertMpAudio();
+        }
+            
         
         
         //Посмотреть, как сделать эксклюзивный доступ

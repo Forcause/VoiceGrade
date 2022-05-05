@@ -7,20 +7,21 @@ namespace VoiceGradeApi.API;
 [Route("api")]
 public class FileUploadController : ControllerBase
 {
-    private string _guid;
     private readonly string _directoryPath;
-    private ProcessingService? _processingService;
+    private readonly ProcessingService? _processingService;
 
     public FileUploadController(ProcessingService service)
     {
-        _guid = Guid.NewGuid().ToString();
-       _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{_guid}"));
-       _processingService = service;
+        _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{Guid.NewGuid()}"));
+        _processingService = service;
     }
 
     [HttpPost("upload")]
     public async Task<ActionResult> UploadFiles(IFormFile file1, IFormFile file2)
     {
+        if (file1 == null) throw new ArgumentNullException(nameof(file1));
+        if (file2 == null) throw new ArgumentNullException(nameof(file2));
+
         if (!Directory.Exists(_directoryPath)) Directory.CreateDirectory(_directoryPath);
         List<string> downloadedFiles = new List<string>();
 
@@ -33,15 +34,14 @@ public class FileUploadController : ControllerBase
             {
                 await file.CopyToAsync(stream);
             }
+
             downloadedFiles.Add(filePath);
         }
-        
-        
-        //_processingService = HttpContext.RequestServices.GetService<ProcessingService>();
-        //_recognizer = HttpContext.RequestServices.GetService<Recognizer>();
+
+
         var res = _processingService?.GetResultedFile(downloadedFiles);
-        byte[] bytes = await System.IO.File.ReadAllBytesAsync(res ?? string.Empty);
-        //return Ok();
-        return File(bytes, "application/json", res);;
+        string resultFileName = res.Substring(res.LastIndexOf("\\") + 1);
+        byte[] bytes = await System.IO.File.ReadAllBytesAsync(res);
+        return File(bytes, "application/json", resultFileName);
     }
 }

@@ -3,7 +3,7 @@ using VoiceGradeApi.Models;
 
 namespace VoiceGradeApi.Services.FileService;
 
-public class JsonService : IFileService
+public sealed class JsonService : IFileService
 {
     private readonly string _generatedFilesDirectory = Directory.GetCurrentDirectory() + @"\GeneratedFiles"; 
     public string CreateFile(List<Pupil> pupils)
