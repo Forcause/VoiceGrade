@@ -6,8 +6,9 @@ public class TextParser
 {
     public List<string> ParseData(string allData)
     {
-        allData = ConvertToNumbers(allData);
-        return allData.Trim().Split("\n").ToList();;
+        allData = ConvertToNumbers(allData.ToLower());
+        List<string> separatedElements = allData.Trim().Split("\n").Where(x => x.Trim().Length != 1).ToList(); 
+        return separatedElements;
     }
 
     private static string ConvertToNumbers(string originalString)
@@ -31,6 +32,6 @@ public class TextParser
             originalString = rgx.Replace(originalString, " " + pair.Value + "\n");
         }
 
-        return originalString.ToLower();
+        return originalString.ToUpper();
     }
 }

@@ -23,9 +23,11 @@ public class Correlator
                     DamerauLevenshtein.GetDistance(name, currentTranscribedElement);
                 int currentSurnameDistance =
                     DamerauLevenshtein.GetDistance(surname, currentTranscribedElement);
+                int totalDistance =
+                    DamerauLevenshtein.GetDistance(surname + " " + name, currentTranscribedElement);
                 int minDistanceBetween = currentNameDistance < currentSurnameDistance
-                    ? currentNameDistance
-                    : currentSurnameDistance;
+                    ? currentNameDistance < totalDistance ? currentNameDistance : totalDistance
+                    : currentSurnameDistance < totalDistance ? currentSurnameDistance : totalDistance;
                 if (minDistanceBetween < minDistance)
                 {
                     minDistance = minDistanceBetween;
@@ -34,7 +36,7 @@ public class Correlator
             }
 
             pupil.Score = int.Parse(getGrade.Replace(transcribedElements[minPosition], ""));
-            //transcribedElements.RemoveAt(minPosition);
+            transcribedElements.RemoveAt(minPosition);
         }
     }
 }
