@@ -11,10 +11,9 @@ public sealed class MpConverter : AudioConverter
         int neededRate = 32000;
         try
         {
-            using var reader = new AudioFileReader(_infile);
-            reader.ToMono(1.0f, 0.0f);
-            var outFormat = new WaveFormat(neededRate, reader.WaveFormat.Channels);
-            using var resample = new MediaFoundationResampler(reader, outFormat);
+            using var waveFileReader = new AudioFileReader(_infile);
+            var outFormat = new WaveFormat(neededRate, 1);
+            using var resample = new MediaFoundationResampler(waveFileReader, outFormat);
             WaveFileWriter.CreateWaveFile(outfile, resample);
         }
         catch (Exception e)
