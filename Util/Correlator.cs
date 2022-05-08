@@ -5,29 +5,36 @@ namespace VoiceGradeApi.Util;
 
 public class Correlator
 {
-    public void CorrelateScores(List<Pupil> pupils, List<string> transcribedNames)
+    public void CorrelateScores(List<Pupil> pupils, List<string> transcribedElements)
     {
         Regex getGrade = new Regex(@"[^\d]");
         Regex getTextOnly = new Regex(@"[^А-Я\s]+");
-        for (int i = 0; i < pupils.Count; i++)
+        foreach (var pupil in pupils)
         {
             int minDistance = Int32.MaxValue;
             int minPosition = 0;
-            string name = pupils[i].Surname + " " + pupils[i].Name;
-            for (int j = 0; j < transcribedNames.Count; j++)
+            string name = pupil.Name.ToUpper().Replace('Ё', 'Е');
+            string surname = pupil.Surname.ToUpper().Replace('Ё', 'Е');
+            for (int j = 0; j < transcribedElements.Count; j++)
             {
-                string currentName = transcribedNames[j].ToUpper().Replace('Ё', 'Е');
-                int currentDistance = DamerauLevenshtein.GetDistance(getTextOnly.Replace(currentName, " ").Trim(),
-                    name.ToUpper().Replace('Ё', 'Е'));
-                if (currentDistance < minDistance)
+                string currentTranscribedElement = transcribedElements[j].ToUpper().Replace('Ё', 'Е');
+                currentTranscribedElement = getTextOnly.Replace(currentTranscribedElement, "").Trim();
+                int currentNameDistance =
+                    DamerauLevenshtein.GetDistance(name, currentTranscribedElement);
+                int currentSurnameDistance =
+                    DamerauLevenshtein.GetDistance(surname, currentTranscribedElement);
+                int minDistanceBetween = currentNameDistance < currentSurnameDistance
+                    ? currentNameDistance
+                    : currentSurnameDistance;
+                if (minDistanceBetween < minDistance)
                 {
-                    minDistance = currentDistance;
+                    minDistance = minDistanceBetween;
                     minPosition = j;
                 }
             }
-            
-            pupils[i].Score = int.Parse(getGrade.Replace(transcribedNames[minPosition], ""));
-            //transcribedNames.RemoveAt(minPosition);
+
+            pupil.Score = int.Parse(getGrade.Replace(transcribedElements[minPosition], ""));
+            //transcribedElements.RemoveAt(minPosition);
         }
     }
 }
