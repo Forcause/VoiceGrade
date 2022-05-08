@@ -27,7 +27,7 @@ public class TextParser
         //Replace words with numbers and separate pupils with newline symbol
         foreach (KeyValuePair<string, string> pair in numberTable)
         {
-            Regex rgx = new Regex(@$"\s+{pair.Key}\s+");
+            Regex rgx = new Regex(@$"\s*{pair.Key}\s*");
             originalString = rgx.Replace(originalString, " " + pair.Value + "\n");
         }
 
