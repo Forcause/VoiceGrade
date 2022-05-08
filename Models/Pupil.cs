@@ -13,7 +13,7 @@ public class Pupil
     [JsonIgnore]
     public string FullName => Surname + " " + Name + " " + Patronymic;  
 
-    public int Score { get; set; }
+    public string Note { get; set; }
 
     public Pupil(string name, string surname, string? patronymic)
     {

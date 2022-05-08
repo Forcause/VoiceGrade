@@ -20,7 +20,7 @@ public sealed class XmlService : IFileService
                     new XElement("Name", pupil.Name),
                     new XElement("Surname", pupil.Surname),
                     new XElement("Patronymic", pupil.Patronymic),
-                    new XElement("Score", pupil.Score))
+                    new XElement("Note", pupil.Note))
             );
             string stringXml = xmlText.ToString();
             writer = new StreamWriter(xmlFilePath);

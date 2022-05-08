@@ -7,7 +7,7 @@ public class Correlator
 {
     public void CorrelateScores(List<Pupil> pupils, List<string> transcribedElements)
     {
-        Regex getGrade = new Regex(@"[^\d]");
+        //Regex getGrade = new Regex(@"[^\d]");
         Regex getTextOnly = new Regex(@"[^А-Я\s]+");
         foreach (var pupil in pupils)
         {
@@ -35,7 +35,7 @@ public class Correlator
                 }
             }
 
-            pupil.Score = int.Parse(getGrade.Replace(transcribedElements[minPosition], ""));
+            pupil.Note = transcribedElements[minPosition].Substring(transcribedElements[minPosition].LastIndexOf(" ")).Trim();
             transcribedElements.RemoveAt(minPosition);
         }
     }
