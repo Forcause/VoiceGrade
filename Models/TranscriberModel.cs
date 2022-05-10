@@ -4,10 +4,10 @@ namespace VoiceGradeApi.Models;
 
 public sealed class TranscriberModel
 {
-    private static TranscriberModel instance = null;
-    private static readonly object padlock = new object();
+    private static TranscriberModel _instance = null;
+    private static readonly object Padlock = new object();
 
-    public readonly Model _model = new Model(@"AudioModels/vosk-model-small-ru-0.22");
+    public readonly Model Model = new Model(@"AudioModels/vosk-model-ru-0.22");
 
     TranscriberModel()
     {
@@ -17,14 +17,20 @@ public sealed class TranscriberModel
     {
         get
         {
-            lock (padlock)
+            if (_instance == null)
             {
-                if (instance == null)
+                lock (Padlock)
                 {
-                    instance = new TranscriberModel();
+                    if (_instance == null)
+                    {
+                        _instance = new TranscriberModel();
+                    }
+
+                    return _instance;
                 }
-                return instance;
             }
+
+            return _instance;
         }
     }
 }

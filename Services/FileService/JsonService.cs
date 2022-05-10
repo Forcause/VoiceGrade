@@ -9,11 +9,11 @@ public sealed class JsonService : IFileService
     public string CreateFile(List<Pupil> pupils)
     {
         if (!Directory.Exists(_generatedFilesDirectory)) Directory.CreateDirectory(_generatedFilesDirectory);
-        string jsonFilePath = _generatedFilesDirectory + @$"\{Guid.NewGuid()}.json";
+        var jsonFilePath = _generatedFilesDirectory + @$"\{Guid.NewGuid()}.json";
         TextWriter writer = null;
         try
         {
-            string json = JsonConvert.SerializeObject(pupils, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(pupils, Formatting.Indented);
             writer = new StreamWriter(jsonFilePath);
             writer.Write(json);
             return jsonFilePath;

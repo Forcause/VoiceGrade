@@ -10,7 +10,7 @@ public sealed class XmlService : IFileService
     public string CreateFile(List<Pupil> pupils)
     {
         if (!Directory.Exists(_generatedFilesDirectory)) Directory.CreateDirectory(_generatedFilesDirectory);
-        string xmlFilePath = _generatedFilesDirectory + @$"\{Guid.NewGuid()}.xml";
+        var xmlFilePath = _generatedFilesDirectory + @$"\{Guid.NewGuid()}.xml";
         TextWriter writer = null;
         try
         {
@@ -22,7 +22,7 @@ public sealed class XmlService : IFileService
                     new XElement("Patronymic", pupil.Patronymic),
                     new XElement("Note", pupil.Note))
             );
-            string stringXml = xmlText.ToString();
+            var stringXml = xmlText.ToString();
             writer = new StreamWriter(xmlFilePath);
             writer.Write(stringXml);
             return xmlFilePath;
@@ -39,8 +39,8 @@ public sealed class XmlService : IFileService
         try
         {
             reader = new StreamReader(path);
-            string readedXml = reader.ReadToEnd();
-            var xmlElements = XElement.Parse(readedXml);
+            var readXml = reader.ReadToEnd();
+            var xmlElements = XElement.Parse(readXml);
             var parsedElements = (from el in xmlElements.Elements("pupil")
                 select new Pupil(el.Attribute("Name").Value, el.Attribute("Surname").Value,
                     el.Attribute("Patronymic").Value)).ToList();

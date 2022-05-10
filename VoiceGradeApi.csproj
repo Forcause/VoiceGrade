@@ -8,15 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NAudio" Version="1.10.0" />
+        <PackageReference Include="NAudio" Version="2.1.0-beta.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="NVorbis" Version="0.10.4" />
+        <PackageReference Include="SimMetrics.Net" Version="1.0.5" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="Vosk" Version="0.3.32" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="GeneratedFiles\5ade4ecd-c210-42ca-8ec8-203ed75289f6.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\15f4e839-f36d-4d28-8fc9-1c52f674251e\s2.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\204ccb97-0e65-4539-94d3-bddcd11e27f8\s2.json" />
+      <_ContentIncludedByDefault Remove="UploadedFiles\6b370c95-a727-4302-85e2-2dacdb580658\s2.json" />
     </ItemGroup>
 
 </Project>

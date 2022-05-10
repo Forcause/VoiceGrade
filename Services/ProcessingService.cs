@@ -7,7 +7,6 @@ namespace VoiceGradeApi.Services;
 
 public class ProcessingService
 {
-   
     private object _lockTranscriber = new object();
     private IFileService _fileService;
     private TextParser _parser;
@@ -22,9 +21,9 @@ public class ProcessingService
     public string GetResultedFile(List<string> files)
     {
         string audioFile = "", pupilsFile = "";
-        foreach (string file in files)
+        foreach (var file in files)
         {
-            FileInfo info = new FileInfo(file);
+            var info = new FileInfo(file);
             switch (info.Extension)
             {
                 case ".json":
@@ -40,25 +39,22 @@ public class ProcessingService
                     break;
             }
         }
-        
-        if (audioFile.Substring(audioFile.LastIndexOf(".") + 1).Equals("ogg"))
-        {
-            OggConverter converter = new OggConverter(audioFile);
-        }
-        else
-        {
-            MpConverter converter = new MpConverter(audioFile);
-            audioFile = converter.ConvertMpAudio();
-        }
-            
-        
-        
+
+        AudioConverter converter;
+
+        /*if (audioFile.Substring(audioFile.LastIndexOf(".") + 1).Equals("ogg"))
+            converter = new OggConverter(audioFile);
+        else*/
+        converter = new MpConverter(audioFile);
+
+        audioFile = converter.ConvertAudio();
+
         //Посмотреть, как сделать эксклюзивный доступ
         var allData = Transcriber.TranscribeAudio(audioFile);
         var pupils = _fileService.ReadFile(pupilsFile);
         var transcribedNames = _parser.ParseData(allData);
         _correlator.CorrelateScores(pupils, transcribedNames);
-        string createdFilePath = _fileService.CreateFile(pupils);
+        var createdFilePath = _fileService.CreateFile(pupils);
         return createdFilePath;
     }
 }

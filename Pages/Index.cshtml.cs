@@ -21,20 +21,20 @@ public class IndexModel : PageModel
  
     public void OnPostUpload(List<IFormFile> postedFiles)
     {
-        string wwwPath = this.Environment.WebRootPath;
-        string contentPath = this.Environment.ContentRootPath;
+        var wwwPath = this.Environment.WebRootPath;
+        var contentPath = this.Environment.ContentRootPath;
  
-        string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+        var path = Path.Combine(this.Environment.WebRootPath, "Uploads");
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
  
-        List<string> uploadedFiles = new List<string>();
-        foreach (IFormFile postedFile in postedFiles)
+        var uploadedFiles = new List<string>();
+        foreach (var postedFile in postedFiles)
         {
-            string fileName = Path.GetFileName(postedFile.FileName);
-            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+            var fileName = Path.GetFileName(postedFile.FileName);
+            using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
             {
                 postedFile.CopyTo(stream);
                 uploadedFiles.Add(fileName);

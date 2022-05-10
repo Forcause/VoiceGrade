@@ -23,9 +23,9 @@ public class FileUploadController : ControllerBase
         if (file2 == null) throw new ArgumentNullException(nameof(file2));
 
         if (!Directory.Exists(_directoryPath)) Directory.CreateDirectory(_directoryPath);
-        List<string> downloadedFiles = new List<string>();
+        var downloadedFiles = new List<string>();
 
-        foreach (IFormFile file in new List<IFormFile> {file1, file2})
+        foreach (var file in new List<IFormFile> {file1, file2})
         {
             var originalName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(_directoryPath, originalName);
@@ -38,10 +38,9 @@ public class FileUploadController : ControllerBase
             downloadedFiles.Add(filePath);
         }
 
-
         var res = _processingService?.GetResultedFile(downloadedFiles);
-        string resultFileName = res.Substring(res.LastIndexOf("\\") + 1);
-        byte[] bytes = await System.IO.File.ReadAllBytesAsync(res);
+        var resultFileName = res[(res.LastIndexOf("\\") + 1)..];
+        var bytes = await System.IO.File.ReadAllBytesAsync(res);
         return File(bytes, "application/json", resultFileName);
     }
 }
