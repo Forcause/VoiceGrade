@@ -4,11 +4,12 @@ namespace VoiceGradeApi.Services.AudioConvertService;
 
 public sealed class MpConverter : AudioConverter
 {
-    public string ConvertMpAudio()
+    public MpConverter(string filePath) : base(filePath)
     {
-        string outfile = _infile.Substring(0, _infile.LastIndexOf(("\\"), StringComparison.Ordinal)) +
-                         @"\converted.wav";
-        int neededRate = 32000;
+    }
+
+    public override string ConvertAudio()
+    {
         try
         {
             using var waveFileReader = new AudioFileReader(_infile);
@@ -22,9 +23,5 @@ public sealed class MpConverter : AudioConverter
         }
 
         return outfile;
-    }
-
-    public MpConverter(string filePath) : base(filePath)
-    {
     }
 }
