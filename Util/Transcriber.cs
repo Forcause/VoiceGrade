@@ -7,14 +7,12 @@ namespace VoiceGradeApi.Util;
 
 internal class Transcriber
 {
-    private static AutoResetEvent _transcriberEvent = new AutoResetEvent(true);
-    
+    private static AutoResetEvent _busyModel = new AutoResetEvent(true);
+
     //Initialize parameters of recognizer
     private static void Initialize(VoskRecognizer rec)
     {
         Vosk.Vosk.SetLogLevel(-1);
-        /*Vosk.Vosk.GpuInit();
-        Vosk.Vosk.GpuThreadInit();*/
         rec.SetMaxAlternatives(0);
         rec.SetWords(true);
     }
@@ -30,8 +28,8 @@ internal class Transcriber
             for (var i = 0; i < results["result"].Count(); i++)
             {
                 //Get needed element in JSON object and add it in string
-                currentElement.Append(results["result"][i]["word"].ToString());
-                currentElement.Append(" ");
+                currentElement.Append(results["result"]?[i]?["word"]);
+                currentElement.Append(' ');
             }
         }
 
@@ -41,17 +39,16 @@ internal class Transcriber
     public static string TranscribeAudio(string audioFilePath)
     {
         //Initialize recognizer Model
-        var model = TranscriberModel.Instance.Model;
-        
+        var model = TranscriberModel.Instance; 
         //Synchronize concurrent session to concurrent model
-        _transcriberEvent.WaitOne();
-        
+        _busyModel.WaitOne();
+
         //Create and initialize parameters of recognizer object
-        VoskRecognizer rec = new(model, 32000.0f);
+        VoskRecognizer rec = new(model.Model, 32000.0f);
         Initialize(rec);
-        
+
         var transcribedText = new StringBuilder("[");
-        
+
         //Transcribe audiofile and add results to StringBuilder
         using (Stream source = File.OpenRead($@"{audioFilePath}"))
         {
@@ -71,10 +68,10 @@ internal class Transcriber
         }
 
         transcribedText.Append(rec.FinalResult() + ']');
-        
+
         //Reset recognizer for other session
         rec.Reset();
-        _transcriberEvent.Set();
+        _busyModel.Set();
         //get and return parsed from JSON text 
         return GetTranscribedText(transcribedText.ToString());
     }
