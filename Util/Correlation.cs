@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
+using SimMetrics.Net.Metric;
 using VoiceGradeApi.Models;
 
 namespace VoiceGradeApi.Util;
 
-public class Correlator
+public class Correlation
 {
     public void CorrelateScores(List<Pupil> pupils, List<string> transcribedElements)
     {
-        //Regex getGrade = new Regex(@"[^\d]");
         var getTextOnly = new Regex(@"[^А-Я\s]+");
         foreach (var pupil in pupils)
         {
@@ -19,14 +19,18 @@ public class Correlator
             {
                 var currentTranscribedElement = transcribedElements[j].ToUpper().Replace('Ё', 'Е');
                 currentTranscribedElement = getTextOnly.Replace(currentTranscribedElement, "").Trim();
+
                 var currentNameDistance =
                     JaroWinklerDistance.GetDistance(name, currentTranscribedElement);
+
                 var currentSurnameDistance =
                     JaroWinklerDistance.GetDistance(surname, currentTranscribedElement);
+
                 var totalDistance =
                     JaroWinklerDistance.GetDistance(surname + " " + name, currentTranscribedElement);
+                
                 var minDistanceBetween = currentNameDistance > currentSurnameDistance
-                    ? currentNameDistance > totalDistance ? currentNameDistance : totalDistance
+                    ? currentNameDistance > totalDistance ? currentNameDistance : currentSurnameDistance
                     : currentSurnameDistance > totalDistance ? currentSurnameDistance : totalDistance;
                 if (minDistanceBetween > minDistance)
                 {
@@ -36,7 +40,6 @@ public class Correlator
             }
 
             pupil.Note = transcribedElements[minPosition][transcribedElements[minPosition].LastIndexOf(" ")..].Trim();
-            //transcribedElements.RemoveAt(minPosition);
         }
     }
 }
