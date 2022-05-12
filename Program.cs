@@ -1,9 +1,8 @@
 using Microsoft.OpenApi.Models;
 using VoiceGradeApi.Services;
-
+using VoiceGradeApi.Util;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -32,20 +31,5 @@ if (app.Environment.IsDevelopment())
 
     app.MapControllers();
 }
-else if (app.Environment.IsEnvironment("TestHtml"))
-{
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
 
-    app.UseRouting();
-
-    app.UseAuthorization();
-    
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}");
-    });
-}
 app.Run();
