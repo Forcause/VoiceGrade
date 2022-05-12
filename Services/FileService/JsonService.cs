@@ -30,10 +30,10 @@ public sealed class JsonService : IFileService
         try
         {
             reader = new StreamReader(path);
-            var readed = reader.ReadToEnd();
-            var jsonPersons = JsonConvert.DeserializeObject<List<Pupil>>(readed);
+            var read = reader.ReadToEnd();
+            var jsonPersons = JsonConvert.DeserializeObject<List<Pupil>>(read);
 
-            return jsonPersons;
+            return jsonPersons ?? throw new Exception("Invalid JSON file");
         }
         finally
         {

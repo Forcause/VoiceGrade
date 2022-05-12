@@ -7,15 +7,14 @@ namespace VoiceGradeApi.Services;
 
 public class ProcessingService
 {
-    private object _lockTranscriber = new object();
     private IFileService _fileService;
     private TextParser _parser;
-    private Correlator _correlator;
+    private Correlation _correlation;
 
     public ProcessingService()
     {
         _parser = new TextParser();
-        _correlator = new Correlator();
+        _correlation = new Correlation();
     }
 
     public string GetResultedFile(List<string> files)
@@ -40,20 +39,12 @@ public class ProcessingService
             }
         }
 
-        AudioConverter converter;
-
-        /*if (audioFile.Substring(audioFile.LastIndexOf(".") + 1).Equals("ogg"))
-            converter = new OggConverter(audioFile);
-        else*/
-        converter = new MpConverter(audioFile);
-
+        AudioConverter converter = new MpConverter(audioFile);
         audioFile = converter.ConvertAudio();
-
-        //Посмотреть, как сделать эксклюзивный доступ
-        var allData = Transcriber.TranscribeAudio(audioFile);
         var pupils = _fileService.ReadFile(pupilsFile);
+        var allData = Transcriber.TranscribeAudio(audioFile);
         var transcribedNames = _parser.ParseData(allData);
-        _correlator.CorrelateScores(pupils, transcribedNames);
+        _correlation.CorrelateScores(pupils, transcribedNames);
         var createdFilePath = _fileService.CreateFile(pupils);
         return createdFilePath;
     }

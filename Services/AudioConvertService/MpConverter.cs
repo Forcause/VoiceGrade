@@ -12,16 +12,16 @@ public sealed class MpConverter : AudioConverter
     {
         try
         {
-            using var waveFileReader = new AudioFileReader(_infile);
-            var outFormat = new WaveFormat(neededRate, 1);
+            using var waveFileReader = new AudioFileReader(Infile);
+            var outFormat = new WaveFormat(NeededRate, 1);
             using var resample = new MediaFoundationResampler(waveFileReader, outFormat);
-            WaveFileWriter.CreateWaveFile(outfile, resample);
+            WaveFileWriter.CreateWaveFile(Outfile, resample);
         }
         catch (Exception e)
         {
             throw new Exception("Error with audio file, try another one");
         }
 
-        return outfile;
+        return Outfile;
     }
 }

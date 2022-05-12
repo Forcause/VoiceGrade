@@ -2,14 +2,14 @@
 
 public abstract class AudioConverter
 {
-    private protected readonly string _infile;
-    private protected readonly string outfile;
-    private protected readonly int neededRate = 32000;
+    private protected readonly string Infile;
+    private protected readonly string Outfile;
+    private protected const int NeededRate = 32000;
 
     protected AudioConverter(string filePath)
     {
-        this._infile = filePath;
-        this.outfile = _infile.Substring(0, _infile.LastIndexOf(("\\"), StringComparison.Ordinal)) +
+        this.Infile = filePath;
+        this.Outfile = Infile.Substring(0, Infile.LastIndexOf(("\\"), StringComparison.Ordinal)) +
                          @"\converted.wav";
     }
 

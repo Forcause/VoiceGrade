@@ -12,11 +12,7 @@ public sealed class TranscriberModel
         _model = new Model(@"AudioModels/vosk-model-ru-0.22");
     }
 
-    private static readonly Lazy<TranscriberModel> lazy =
-        new Lazy<TranscriberModel>(() => new TranscriberModel());
+    private static readonly Lazy<TranscriberModel> Lazy = new(() => new TranscriberModel());
 
-    public static TranscriberModel Instance
-    {
-        get { return lazy.Value; }
-    }
+    public static TranscriberModel Instance => Lazy.Value;
 }

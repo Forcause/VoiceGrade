@@ -29,7 +29,7 @@ public sealed class XmlService : IFileService
         }
         finally
         {
-            if (writer is not null) writer.Close();
+            writer?.Close();
         }
     }
 
@@ -48,7 +48,7 @@ public sealed class XmlService : IFileService
         }
         finally
         {
-            if (reader is not null) reader.Close();
+            reader?.Close();
         }
     }
 }
