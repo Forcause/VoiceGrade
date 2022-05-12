@@ -7,6 +7,11 @@
         <EnablePreviewFeatures>true</EnablePreviewFeatures>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>VoiceGradeApi.xml</DocumentationFile>
+      <NoWarn>1701;1702;1591</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="NAudio" Version="2.1.0-beta.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
