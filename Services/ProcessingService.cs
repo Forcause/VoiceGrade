@@ -17,7 +17,7 @@ public class ProcessingService
         _correlation = new Correlation();
     }
 
-    public string GetResultedFile(List<string> files)
+    public string GetResultedFile(List<string> files, TranscriberModel model)
     {
         string audioFile = "", pupilsFile = "";
         foreach (var file in files)
