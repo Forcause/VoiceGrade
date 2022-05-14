@@ -1,6 +1,9 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
+
+var model = TranscriberModel.Instance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,7 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddSingleton<TranscriberModel>(model);
 builder.Services.AddTransient<ProcessingService>();
 
 var app = builder.Build();
@@ -28,11 +32,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1 API"));
-
     app.UseHttpsRedirection();
-
     app.UseAuthorization();
-
     app.MapControllers();
 }
 

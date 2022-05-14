@@ -7,7 +7,7 @@ namespace VoiceGradeApi.Util;
 
 internal class Transcriber
 {
-    private static AutoResetEvent _busyModel = new AutoResetEvent(true);
+    private static readonly AutoResetEvent _busyModel = new(true);
 
     //Initialize parameters of recognizer
     private static void Initialize(VoskRecognizer rec)
@@ -36,19 +36,19 @@ internal class Transcriber
         return currentElement.ToString();
     }
 
-    public static string TranscribeAudio(string audioFilePath)
+    public static string TranscribeAudio(string audioFilePath, TranscriberModel model)
     {
         //Initialize recognizer Model
-        var model = TranscriberModel.Instance; 
+        //var model = _model.Instance; 
         //Synchronize concurrent session to concurrent model
         _busyModel.WaitOne();
 
+        var transcribedText = new StringBuilder("[");
+        
         //Create and initialize parameters of recognizer object
         VoskRecognizer rec = new(model.Model, 32000.0f);
         Initialize(rec);
-
-        var transcribedText = new StringBuilder("[");
-
+        
         //Transcribe audiofile and add results to StringBuilder
         using (Stream source = File.OpenRead($@"{audioFilePath}"))
         {

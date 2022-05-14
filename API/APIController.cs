@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
 
 namespace VoiceGradeApi.API;
@@ -9,11 +10,13 @@ public class FileUploadController : ControllerBase
 {
     private readonly string _directoryPath;
     private readonly ProcessingService? _processingService;
+    private readonly TranscriberModel? _transcriberModel;
 
-    public FileUploadController(ProcessingService service)
+    public FileUploadController(ProcessingService service, TranscriberModel model)
     {
         _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{Guid.NewGuid()}"));
         _processingService = service;
+        _transcriberModel = model;
     }
 
     /// <summary>
@@ -67,7 +70,7 @@ public class FileUploadController : ControllerBase
             downloadedFiles.Add(filePath);
         }
 
-        var res = _processingService?.GetResultedFile(downloadedFiles);
+        var res = _processingService?.GetResultedFile(downloadedFiles, _transcriberModel);
         var resultFileName = res[(res.LastIndexOf("\\") + 1)..];
         var bytes = await System.IO.File.ReadAllBytesAsync(res);
         return File(bytes, "application/json", resultFileName);
