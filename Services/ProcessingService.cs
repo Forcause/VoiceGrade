@@ -1,4 +1,5 @@
-﻿using VoiceGradeApi.Services.FileService;
+﻿using VoiceGradeApi.Models;
+using VoiceGradeApi.Services.FileService;
 using VoiceGradeApi.Services.AudioConvertService;
 using VoiceGradeApi.Util;
 using Transcriber = VoiceGradeApi.Util.Transcriber;
@@ -42,7 +43,7 @@ public class ProcessingService
         AudioConverter converter = new MpConverter(audioFile);
         audioFile = converter.ConvertAudio();
         var pupils = _fileService.ReadFile(pupilsFile);
-        var allData = Transcriber.TranscribeAudio(audioFile);
+        var allData = Transcriber.TranscribeAudio(audioFile, model);
         var transcribedNames = _parser.ParseData(allData);
         _correlation.CorrelateScores(pupils, transcribedNames);
         var createdFilePath = _fileService.CreateFile(pupils);
