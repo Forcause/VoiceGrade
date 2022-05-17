@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
@@ -20,7 +21,7 @@ public class FileUploadController : ControllerBase
     }
 
     /// <summary>
-    /// Получает аудиофайл (MP3/WAV) и список учеников (JSON/XML)
+    /// Получает аудиофайл (MP3/WAV/M4A) и список учеников (JSON/XML)
     /// </summary>
     /// <remarks>
     /// Пример JSON элемента файла:
@@ -41,16 +42,17 @@ public class FileUploadController : ControllerBase
     ///         Surname = "Булгаков"
     ///         Patronymic = "Сергеевич"
     ///
-    /// Загружаемый аудиофайл должен быть в формате mp3 или wav.
+    /// Загружаемый аудиофайл должен быть в формате mp3/wav/m4a.
     /// В качестве ответа будет отправлен файл в формате JSON/XML, с проставленными оценками
     /// </remarks>
     /// <response code="200"> Итоговый файл создан</response>
-    /// <returns>Возвращает файл с учениками и их отметками (json/xml)</returns>
     // POST: api/upload
     
     [HttpPost("upload")]
     public async Task<ActionResult> UploadFiles(IFormFile file1, IFormFile file2)
     {
+        var sw = new Stopwatch();
+        sw.Start();
         if (file1 == null) throw new ArgumentNullException(nameof(file1));
         if (file2 == null) throw new ArgumentNullException(nameof(file2));
 
@@ -73,6 +75,9 @@ public class FileUploadController : ControllerBase
         var res = _processingService?.GetResultedFile(downloadedFiles, _transcriberModel);
         var resultFileName = res[(res.LastIndexOf("\\") + 1)..];
         var bytes = await System.IO.File.ReadAllBytesAsync(res);
+        sw.Stop();
+        Console.WriteLine(sw.Elapsed.TotalSeconds);
+        sw.Reset();
         return File(bytes, "application/json", resultFileName);
     }
 }

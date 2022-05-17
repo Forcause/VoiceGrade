@@ -52,18 +52,18 @@ public static class JaroWinklerDistance
             return DefaultMatches;
         }
 
-        var transpositionCounter = 0;
+        var halfTranspositions = 0;
         for (var i = 0; i < matches; i++)
         {
             if (firstToSecondWords[i] != secondToFirstWords[i])
             {
-                transpositionCounter++;
+                halfTranspositions++;
             }
         }
 
-        transpositionCounter /= 2;
+        halfTranspositions /= 2;
         return matches / (3.0 * firstWord.Length) + matches / (3.0 * secondWord.Length) +
-               (matches - transpositionCounter) / (3.0 * matches);
+               (matches - halfTranspositions) / (3.0 * matches);
     }
 
     private static StringBuilder? GetCommonCharacters(string? firstWord, string? secondWord, int halfRoundedLength)
