@@ -10,13 +10,13 @@ public class FileUploadController : ControllerBase
 {
     private readonly string _directoryPath;
     private readonly ProcessingService? _processingService;
-    private readonly TranscriberModel? _transcriberModel;
+    private readonly TranscriberService? _transcriberService;
 
-    public FileUploadController(ProcessingService service, TranscriberModel model)
+    public FileUploadController(ProcessingService processingService, TranscriberService transcriberService)
     {
         _directoryPath = (Directory.GetCurrentDirectory() + ($@"\UploadedFiles\{Guid.NewGuid()}"));
-        _processingService = service;
-        _transcriberModel = model;
+        _processingService = processingService;
+        _transcriberService = transcriberService;
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class FileUploadController : ControllerBase
             downloadedFiles.Add(filePath);
         }
 
-        var res = _processingService?.GetResultedFile(downloadedFiles, _transcriberModel);
+        var res = _processingService?.GetResultedFile(downloadedFiles, _transcriberService);
         var resultFileName = res[(res.LastIndexOf("\\") + 1)..];
         var bytes = await System.IO.File.ReadAllBytesAsync(res);
         return File(bytes, "application/json", resultFileName);
