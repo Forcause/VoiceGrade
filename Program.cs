@@ -1,9 +1,6 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
-using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
-
-var model = TranscriberModel.Instance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddSingleton<TranscriberModel>(model);
+builder.Services.AddSingleton<TranscriberService>();
 builder.Services.AddTransient<ProcessingService>();
 
 var app = builder.Build();

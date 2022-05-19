@@ -3,11 +3,18 @@ using Newtonsoft.Json.Linq;
 using VoiceGradeApi.Models;
 using Vosk;
 
-namespace VoiceGradeApi.Util;
+namespace VoiceGradeApi.Services;
 
-internal class Transcriber
+public class TranscriberService
 {
-    private static readonly AutoResetEvent _busyModel = new(true);
+    private static VoskRecognizer _recognizer;
+
+    public TranscriberService()
+    {
+        var model = TranscriberModel.Instance;
+        _recognizer = new VoskRecognizer(model.Model, 32000.0f);
+        Initialize(_recognizer);
+    }
 
     //Initialize parameters of recognizer
     private static void Initialize(VoskRecognizer rec)
@@ -36,42 +43,30 @@ internal class Transcriber
         return currentElement.ToString();
     }
 
-    public static string TranscribeAudio(string audioFilePath, TranscriberModel model)
+
+    public string TranscribeAudio(string audioFilePath)
     {
-        //Initialize recognizer Model
-        //var model = _model.Instance; 
-        //Synchronize concurrent session to concurrent model
-        _busyModel.WaitOne();
 
         var transcribedText = new StringBuilder("[");
-        
-        //Create and initialize parameters of recognizer object
-        VoskRecognizer rec = new(model.Model, 32000.0f);
-        Initialize(rec);
-        
+
         //Transcribe audiofile and add results to StringBuilder
-        using (Stream source = File.OpenRead($@"{audioFilePath}"))
+        using Stream source = File.OpenRead($@"{audioFilePath}");
+        var buffer = new byte[4096];
+        int bytesRead;
+        lock ("test")
         {
-            var buffer = new byte[4096];
-            int bytesRead;
             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
             {
-                if (rec.AcceptWaveform(buffer, bytesRead))
+                if (_recognizer.AcceptWaveform(buffer, bytesRead))
                 {
-                    transcribedText.Append(rec.Result() + ',');
-                }
-                else
-                {
-                    rec.PartialResult();
+                    transcribedText.Append(_recognizer.Result() + ',');
                 }
             }
+
+            transcribedText.Append(_recognizer.FinalResult() + ']');
+            //Reset recognizer for other session
+            _recognizer.Reset();
         }
-
-        transcribedText.Append(rec.FinalResult() + ']');
-
-        //Reset recognizer for other session
-        rec.Reset();
-        _busyModel.Set();
         //get and return parsed from JSON text 
         return GetTranscribedText(transcribedText.ToString());
     }

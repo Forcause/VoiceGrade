@@ -9,7 +9,7 @@ public sealed class TranscriberModel
 
     TranscriberModel()
     {
-        _model = new Model(@"AudioModels/vosk-model-ru-0.22");
+        _model = new Model(@"AudioModels/vosk-model-ru-0.22_1");
     }
 
     private static readonly Lazy<TranscriberModel> Lazy = new(() => new TranscriberModel());
