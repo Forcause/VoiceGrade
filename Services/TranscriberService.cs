@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Newtonsoft.Json.Linq;
 using VoiceGradeApi.Models;
 using Vosk;
@@ -8,7 +9,7 @@ namespace VoiceGradeApi.Services;
 public class TranscriberService
 {
     private static VoskRecognizer _recognizer;
-
+    private static readonly object SyncLocker = new ();
     public TranscriberService()
     {
         var model = TranscriberModel.Instance;
@@ -46,20 +47,20 @@ public class TranscriberService
 
     public string TranscribeAudio(string audioFilePath)
     {
-
+    
         var transcribedText = new StringBuilder("[");
-
+        
         //Transcribe audiofile and add results to StringBuilder
         using Stream source = File.OpenRead($@"{audioFilePath}");
         var buffer = new byte[4096];
         int bytesRead;
-        lock ("test")
+        lock (SyncLocker)
         {
             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
             {
-                if (_recognizer.AcceptWaveform(buffer, bytesRead))
+                if (!_recognizer.AcceptWaveform(buffer, bytesRead))
                 {
-                    transcribedText.Append(_recognizer.Result() + ',');
+                    _recognizer.PartialResult();
                 }
             }
 

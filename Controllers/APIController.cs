@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using VoiceGradeApi.Models;
 using VoiceGradeApi.Services;
 
 namespace VoiceGradeApi.API;
@@ -51,6 +50,7 @@ public class FileUploadController : ControllerBase
     [HttpPost("upload")]
     public async Task<ActionResult> UploadFiles(IFormFile file1, IFormFile file2)
     {
+        
         if (file1 == null) throw new ArgumentNullException(nameof(file1));
         if (file2 == null) throw new ArgumentNullException(nameof(file2));
 

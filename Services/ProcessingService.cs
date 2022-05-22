@@ -1,4 +1,5 @@
-﻿using VoiceGradeApi.Services.FileService;
+﻿using System.Diagnostics;
+using VoiceGradeApi.Services.FileService;
 using VoiceGradeApi.Services.AudioConvertService;
 using VoiceGradeApi.Util;
 
