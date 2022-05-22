@@ -8,17 +8,17 @@ public class Pupil
     
     public string Name { get; }
 
-    public string? Patronymic { get; }
+    public string? MiddleName { get; }
 
     [JsonIgnore]
-    public string FullName => Surname + " " + Name + " " + Patronymic;  
+    public string FullName => Surname + " " + Name + " " + MiddleName;  
 
     public string? Note { get; set; }
 
-    public Pupil(string name, string surname, string? patronymic)
+    public Pupil(string name, string surname, string? middleName)
     {
         Name = name;
         Surname = surname;
-        Patronymic = patronymic;
+        MiddleName = middleName;
     }
 }

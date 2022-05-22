@@ -19,7 +19,7 @@ public sealed class XmlService : IFileService
                 select new XElement("Pupil",
                     new XElement("Name", pupil.Name),
                     new XElement("Surname", pupil.Surname),
-                    new XElement("Patronymic", pupil.Patronymic),
+                    new XElement("Patronymic", pupil.MiddleName),
                     new XElement("Note", pupil.Note))
             );
             var stringXml = xmlText.ToString();
