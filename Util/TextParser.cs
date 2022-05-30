@@ -13,7 +13,7 @@ public class TextParser
 
     private static string ConvertToNumbers(string originalString)
     {
-        //Dictionary to convert words to numbers
+        //Dictionary to convert words to notes
         var noteTable = new Dictionary<string, string>
         {
             { "один", "1" }, { "кол", "1" }, { "единичка", "1" }, { "ты", "2" },

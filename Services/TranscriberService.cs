@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using Newtonsoft.Json.Linq;
 using VoiceGradeApi.Models;
 using Vosk;
@@ -45,9 +44,8 @@ public class TranscriberService
     }
 
 
-    public string TranscribeAudio(string audioFilePath)
+    public static string TranscribeAudio(string audioFilePath)
     {
-    
         var transcribedText = new StringBuilder("[");
         
         //Transcribe audiofile and add results to StringBuilder

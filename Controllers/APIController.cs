@@ -19,7 +19,7 @@ public class FileUploadController : ControllerBase
     }
 
     /// <summary>
-    /// Получает аудиофайл (MP3/WAV) и список учеников (JSON/XML)
+    /// Получает аудиофайл (MP3/WAV/M4A) и список учеников (JSON/XML)
     /// </summary>
     /// <remarks>
     /// Пример JSON элемента файла:
@@ -28,7 +28,7 @@ public class FileUploadController : ControllerBase
     ///       {
     ///         "Name": "Илья",
     ///         "Surname": "Воробьев",
-    ///         "Patronymic": "Викторович"
+    ///         "MiddleName": "Викторович"
     ///       },
     ///
     /// 
@@ -38,12 +38,13 @@ public class FileUploadController : ControllerBase
     ///     pupil
     ///         Name = "Юрий"
     ///         Surname = "Булгаков"
-    ///         Patronymic = "Сергеевич"
+    ///         MiddleName = "Сергеевич"
     ///
-    /// Загружаемый аудиофайл должен быть в формате mp3 или wav.
+    /// Загружаемый аудиофайл должен быть в формате mp3, wav, m4a.
     /// В качестве ответа будет отправлен файл в формате JSON/XML, с проставленными оценками
     /// </remarks>
     /// <response code="200"> Итоговый файл создан</response>
+    /// <response code="400"> Проблемы с загрузкой файлов</response>
     /// <returns>Возвращает файл с учениками и их отметками (json/xml)</returns>
     // POST: api/upload
     
